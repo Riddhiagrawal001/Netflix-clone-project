@@ -1,17 +1,17 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import "./NavBar.css";
 
 export default function NavBar() {
   const [show, handleShow] = React.useState(false);
+  const history = useHistory();
+
+  const transitionNavBar = () =>
+    window.scrollY > 100 ? handleShow(true) : handleShow(false);
+
   React.useEffect(() => {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 100) {
-        handleShow(true);
-      } else handleShow(false);
-    });
-    return () => {
-      window.removeEventListener("scroll");
-    };
+    window.addEventListener("scroll", transitionNavBar);
+    return () => window.removeEventListener("scroll", transitionNavBar);
   }, []);
   return (
     <div className={`nav ${show && "nav_black"}`}>
@@ -21,6 +21,7 @@ export default function NavBar() {
         alt="Netflix_Logo"
       />
       <img
+        onClick={() => history.push("/profile")}
         className="nav_avatar"
         src="https://i.pinimg.com/originals/0d/dc/ca/0ddccae723d85a703b798a5e682c23c1.png"
         alt="Avatar"
